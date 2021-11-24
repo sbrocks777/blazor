@@ -1,0 +1,13 @@
+nav > div {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1em .5em;
+  color: #000;
+  border-radius: .3em;
+}
+
+.nav-link {
+  color: #fafafa;
+}
