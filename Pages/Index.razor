@@ -2,8 +2,51 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<p>
+    <label>
+        <input @bind="InputValue" @bind:event="oninput" @onkeydown="@Enter" @onchange="@((ChangeEventArgs __e) => InputValue = __e?.Value?.ToString())"/>
+        <small class="text-danger">@err</small>
+    </label>
+</p>
 
-Welcome to your new app.
+<p>
+    @foreach (var todo in todos)
+    {
+        <li>@todo.Title</li>
+    }
+</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    public class TodoItem { public string? Title { get; set; } }
+    private List<TodoItem> todos = new();
+    private string InputValue { get; set; }
+    private string err { get; set; }
+
+    public bool IsValidEmail(string email)
+    {
+        if (email.Trim().EndsWith(".")) {
+            return false; // suggested by @TK-421
+        }
+        try {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch {
+            return false;
+        }
+    }
+
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            if(IsValidEmail(InputValue)) {
+                todos.Add(new TodoItem { Title = InputValue });
+                err = string.Empty;
+                InputValue = string.Empty;
+            } else {
+                err = "Not Valid";
+            }
+        }
+    }
+}
